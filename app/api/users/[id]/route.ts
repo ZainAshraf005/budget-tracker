@@ -16,7 +16,7 @@ export async function DELETE(
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
 
-    await Transaction.deleteMany({ user: params.id });
+    await Transaction.deleteMany({ user: id });
 
     return NextResponse.json(
       { message: "User and all related transactions deleted" },
