@@ -29,8 +29,9 @@ export function LoginForm({
     e.preventDefault();
     try {
       const res = await axios.post("/api/users", { name, email });
-      console.log(res);
-      if (res.statusText === "OK") {
+      
+      if (res.data) {
+        console.log(res.data);
         setUser(res.data);
         router.push("/dashboard");
       }
