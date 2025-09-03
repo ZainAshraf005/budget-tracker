@@ -22,22 +22,25 @@ export function LoginForm({
 }: React.ComponentProps<"div">) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false); // added loading state
   const { setUser } = useUserStore();
   const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true); // start loading
     try {
       const res = await axios.post("/api/users", { name, email });
       
       if (res.data) {
-        console.log(res.data);
         setUser(res.data);
         router.push("/dashboard");
       }
     } catch (err) {
       if (err instanceof AxiosError)
         console.error("Login error:", err.response?.data || err.message);
+    } finally {
+      setLoading(false); // stop loading
     }
   };
 
@@ -64,6 +67,7 @@ export function LoginForm({
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
+                  disabled={loading} // disable while loading
                 />
               </div>
               <div className="grid gap-3">
@@ -75,12 +79,13 @@ export function LoginForm({
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
+                  disabled={loading} // disable while loading
                 />
               </div>
 
               <div className="flex flex-col gap-3">
-                <Button type="submit" className="w-full">
-                  Login
+                <Button type="submit" className="w-full" disabled={loading}>
+                  {loading ? "Logging in..." : "Login"} {/* show loading text */}
                 </Button>
               </div>
             </div>
