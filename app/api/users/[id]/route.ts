@@ -5,12 +5,12 @@ import Transaction from "@/models/Transaction";
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await dbConnect();
-
-    const user = await User.findByIdAndDelete(params.id);
+    const {id} = await params;
+    const user = await User.findByIdAndDelete(id);
 
     if (!user) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
