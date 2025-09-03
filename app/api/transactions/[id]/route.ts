@@ -4,11 +4,12 @@ import Transaction from "@/models/Transaction";
 
 export async function GET(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await dbConnect();
-    const transaction = await Transaction.findById(params.id);
+    const {id} = await params
+    const transaction = await Transaction.findById(id);
     if (!transaction) {
       return NextResponse.json({ message: "Not found" }, { status: 404 });
     }
