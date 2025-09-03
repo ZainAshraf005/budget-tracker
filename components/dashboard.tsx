@@ -76,7 +76,7 @@ export function Dashboard() {
   const deleteTransaction = async (transactionId: string) => {
     try {
       const res = await axios.delete(`/api/transactions/${transactionId}`);
-      if (res.status === 200) {
+      if (res) {
         setTransactions((prev) => prev.filter((t) => t._id !== transactionId));
       }
     } catch (err) {
