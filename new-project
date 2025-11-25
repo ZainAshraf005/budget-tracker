@@ -1,0 +1,672 @@
+MadeEasy Marketing
+
+Full Product & Build Brief for Developer Quote
+
+This document is for development partners. It explains what MadeEasy must do, how it should behave, and how we want you to structure your quote and phases.
+
+The goal is a clean, simple SaaS that a busy local business owner can actually use without getting lost.
+
+â¸»
+
+1. Overview
+
+Product name: MadeEasy Marketing
+Type: B2B SaaS web app for local service businesses
+
+Who it is for
+	â€¢	Trades: plumbers, electricians, joiners, roofers, heating engineers
+	â€¢	Personal services: hair, beauty, barbers, gyms, PTs
+	â€¢	Hospitality: cafÃ©s, coffee shops, small restaurants
+	â€¢	Local clinics: physio, opticians, dentists, chiropractors
+
+Primary geography to start: Leeds / West Yorkshire, then UK wide.
+
+Core value
+
+MadeEasy turns 10â€“15 minutes of the ownerâ€™s raw photos and clips into a month of posts on:
+	â€¢	Google Business Profile
+	â€¢	Facebook
+	â€¢	Instagram
+
+We use:
+	â€¢	Human marketers to set tone, rules, and clean things up
+	â€¢	AI to draft captions and ideas
+	â€¢	A simple Visual Calendar for approvals
+	â€¢	A Social Inbox to reply to comments and reviews
+	â€¢	An Outcomes tab to show calls, directions and taps
+	â€¢	A Smart Link page for simple attribution
+	â€¢	Later: Local Boost â€œReach Packsâ€ to run one tap local ads from approved posts
+
+Users always approve content before anything is published.
+
+â¸»
+
+2. Tech stack and general requirements
+
+2.1 Suggested stack
+
+We expect something close to:
+	â€¢	Backend: Laravel (PHP)
+	â€¢	Frontend: React or Vue SPA
+	â€¢	Database: MySQL or Postgres
+	â€¢	Hosting: AWS (EC2/Fargate, RDS, S3, SQS or equivalent queue, CloudFront if needed)
+
+If you propose something else, explain the stack and why. The stack must support:
+	â€¢	Third party integrations (Meta, Google, Stripe)
+	â€¢	Background jobs and queues
+	â€¢	A separate admin panel
+	â€¢	Future mobile apps talking to the same API
+
+2.2 Non functional requirements
+	â€¢	Mobile first, responsive web app
+	â€¢	Fast page load and simple UI
+	â€¢	Clean separation between:
+	â€¢	User facing app
+	â€¢	Internal admin / ops console
+	â€¢	Structured logging and monitoring for:
+	â€¢	API failures (Meta, Google, Stripe)
+	â€¢	Post failures
+	â€¢	Ad failures (later)
+	â€¢	Environment based config:
+	â€¢	Sandbox vs production keys
+	â€¢	Feature flags for Local Boost and new features
+
+Security basics:
+	â€¢	Encrypted transport (HTTPS only)
+	â€¢	Proper access control per role
+	â€¢	No secrets in client code
+	â€¢	GDPR aware (UK user base)
+
+â¸»
+
+3. Phasing and quote structure
+
+You must provide:
+	1.	Total estimate for full scope
+	2.	Phase by phase breakdown with:
+	â€¢	Features included per phase
+	â€¢	Estimated hours or fixed fee per phase
+	â€¢	Key dependencies or assumptions
+
+We want three phases:
+	â€¢	Phase 1 â€“ Core Product Launch
+Usable app with trials, content, calendar, inbox, outcomes, smart link.
+	â€¢	Phase 2 â€“ Quality and Depth
+UX polish, Smart Link and Outcomes improvements, internal ops tools, basic roles.
+	â€¢	Phase 3 â€“ Local Boost Ads Layer
+Reach Packs, Meta and Google ads integration, Boost UI and reporting, fraud and safety logic.
+
+You can suggest tweaks to the phase split, but each phase must be shippable and stable.
+
+â¸»
+
+4. User roles and accounts
+
+4.1 Roles
+
+At launch:
+	â€¢	Owner (business user)
+	â€¢	Full access to their business account
+	â€¢	Can approve posts, manage inbox, view outcomes, manage billing
+
+Internal roles (admin panel):
+	â€¢	Admin / Super admin
+	â€¢	Access to all accounts
+	â€¢	Billing overrides, plan changes
+	â€¢	Feature flags, error views
+	â€¢	Content ops / marketer
+	â€¢	Access to internal content ops dashboard
+	â€¢	Can manage Personal Formula and drafts for assigned accounts
+
+Later (Phase 2):
+	â€¢	Staff / worker (invited by Owner)
+	â€¢	Restricted access (for example inbox only, or approvals only)
+
+4.2 Authentication
+	â€¢	Email / password signup
+	â€¢	Email verification
+	â€¢	Password reset
+	â€¢	Basic brute force protection (rate limiting)
+	â€¢	Ability to enforce strong passwords
+
+â¸»
+
+5. Core feature set by phase
+
+Phase 1 â€“ Core Product Launch
+
+This is the minimum version we can launch with paying customers on.
+
+â¸»
+
+5.1 Onboarding and profile
+Onboarding checklist:
+	1.	Business category
+	â€¢	User chooses from a curated list (plumber, barber, cafÃ©, physio, etc.)
+	2.	Connect accounts
+	â€¢	Facebook Page
+	â€¢	Instagram business account
+	â€¢	Google Business Profile
+	3.	Upload minimum content
+	â€¢	At least 6 photos or 1 short video
+	â€¢	Stored in a simple media library per business
+	4.	Business details
+	â€¢	Services offered
+	â€¢	Service area
+	â€¢	Short description
+	â€¢	â€œNever post thisâ€ notes
+	5.	Billing and terms
+	â€¢	Card details collected via Stripe
+	â€¢	Terms of Service and Privacy Policy consent recorded
+
+Trial rules:
+	â€¢	Plan: Pro trial
+	â€¢	Length: 6 weeks
+	â€¢	Trial starts only when the checklist is complete
+	â€¢	Card is required to start the trial
+	â€¢	If user cancels before trial end:
+	â€¢	Do not bill
+	â€¢	Keep access until trial end date
+	â€¢	If user does not cancel:
+	â€¢	Auto convert to Pro plan and bill at current price
+
+â¸»
+
+5.2 Plans and billing
+Plans at app level:
+	â€¢	Starter
+	â€¢	Pro
+	â€¢	Pro Plus
+	â€¢	Ultimate
+
+You do not need to hard code every feature per plan in the code. Use a plan / feature matrix in config or DB so we can adjust.
+
+Requirements:
+	â€¢	Monthly subscriptions with Stripe (or similar)
+	â€¢	Plan changes (upgrade / downgrade)
+	â€¢	Free tier support (very limited features)
+	â€¢	Clear billing history per account
+	â€¢	Card on file logic and handling of failed payments
+
+Retention logic (for Pro and above):
+	â€¢	When user clicks â€œcancelâ€:
+	â€¢	Show retention offer:
+	â€¢	Move to a cheaper plan at 50 percent price for one month
+	â€¢	If user accepts:
+	â€¢	Apply a one time 50 percent discount to cheaper plan for next month
+	â€¢	After that, revert to normal price unless cancelled
+	â€¢	If user declines:
+	â€¢	Cancel subscription at end of current paid period
+
+â¸»
+
+5.3 Media library (assets)
+Per business:
+	â€¢	Upload images and short videos
+	â€¢	Store on S3 or similar with secure URLs
+	â€¢	Metadata fields:
+	â€¢	File type
+	â€¢	Upload date
+	â€¢	Optional tags (phase 2)
+	â€¢	Basic size limits and validation
+
+No editing tools needed in Phase 1.
+
+â¸»
+
+5.4 Human + AI content engine (internal workflow)
+We need backend structures and screens so internal content people can actually work.
+
+Data objects:
+	â€¢	Account profile (sector, tone notes, doâ€™s and do nots)
+	â€¢	Personal Formula (free text notes per account)
+	â€¢	Post draft:
+	â€¢	Asset reference
+	â€¢	Caption text
+	â€¢	Target platforms
+	â€¢	Scheduled date/time
+	â€¢	Status: draft, awaiting approval, approved, published, failed
+
+Internal content ops UI:
+	â€¢	List of accounts with filters (by sector, trial, last activity)
+	â€¢	Account detail view:
+	â€¢	Business info
+	â€¢	Assets
+	â€¢	Personal Formula (editable)
+	â€¢	Draft creation:
+	â€¢	Pick asset(s)
+	â€¢	Call internal AI API to get caption suggestions
+	â€¢	Edit caption and details
+	â€¢	Set as â€œawaiting approvalâ€ and schedule
+
+AI integration:
+	â€¢	We will provide API access to an AI model
+	â€¢	You provide:
+	â€¢	A backend endpoint that accepts structured prompt info
+	â€¢	A model for storing AI outputs / logs if needed
+	â€¢	Internal UI should show 2â€“3 caption options, with â€œaccept and editâ€ flow.
+
+â¸»
+
+5.5 Visual Calendar
+The Calendar is the main hub for owners.
+
+Features:
+	â€¢	Month view and week view
+	â€¢	Each post represented as a card with:
+	â€¢	Thumbnail (first asset)
+	â€¢	Platforms icons (FB, IG, GBP)
+	â€¢	Status colour or tag
+	â€¢	Day and time
+
+Post detail drawer / modal:
+	â€¢	Shows:
+	â€¢	Full caption
+	â€¢	Assets
+	â€¢	Platforms
+	â€¢	Scheduled time
+	â€¢	Status
+	â€¢	Actions:
+	â€¢	Approve
+	â€¢	Request change (comment)
+	â€¢	Delete or unschedule
+
+Rules:
+	â€¢	Nothing can be published without explicit approval from the Owner.
+	â€¢	Internal content ops can prepare drafts but not push them live.
+
+Manual posts:
+	â€¢	Owner can create a simple post from the Calendar:
+	â€¢	Upload asset
+	â€¢	Write caption
+	â€¢	Pick platforms and time
+	â€¢	Option to request review by internal team before approval if we want that path
+
+â¸»
+
+5.6 Social publishing
+Platforms in Phase 1:
+	â€¢	Facebook Page feed
+	â€¢	Instagram feed
+	â€¢	Google Business Profile posts
+
+Requirements:
+	â€¢	OAuth connection for each platform per account
+	â€¢	Background workers to publish on schedule
+	â€¢	Retry logic for transient errors
+	â€¢	Store external post IDs and basic metrics we can pull later if needed
+	â€¢	Respect platform rate limits
+
+If a post fails:
+	â€¢	Log error internally
+	â€¢	Mark post as â€œfailedâ€ in Calendar
+	â€¢	Show a simple â€œcould not publishâ€ banner and suggest retry or contact support
+
+â¸»
+
+5.7 Social Inbox
+Unified Inbox across:
+	â€¢	Facebook comments on our posts
+	â€¢	Instagram comments on our posts
+	â€¢	Google reviews for connected GBP
+
+Inbox list:
+	â€¢	Each thread shows:
+	â€¢	Platform icon
+	â€¢	Snippet of comment / review
+	â€¢	Time
+	â€¢	Status (unread / replied)
+
+Thread view:
+	â€¢	Show full message history (if available)
+	â€¢	Show the associated post if relevant
+	â€¢	Input box for reply:
+	â€¢	Send reply back to the correct platform via API
+	â€¢	Mark thread as replied and/or resolved
+
+Filters:
+	â€¢	All / Unread / Replied
+	â€¢	Filter by platform (Facebook, Instagram, GBP)
+
+â¸»
+
+5.8 AI Captions helper (user facing)
+Separate tool that lets the user self serve.
+
+UI:
+	â€¢	Inputs:
+	â€¢	Purpose (offer, story, testimonial, job update, tip, etc.)
+	â€¢	Tone (friendly, professional, bold)
+	â€¢	Free text description
+	â€¢	Target platforms
+	â€¢	Outputs:
+	â€¢	3 suggested captions from AI
+	â€¢	User can:
+	â€¢	Copy text
+	â€¢	Save as a draft in Calendar with a chosen date/time and platform set
+
+Backend:
+	â€¢	API endpoint to call AI model with structured prompt
+	â€¢	Handle rate limiting and errors cleanly
+
+â¸»
+
+5.9 Smart Link and Outcomes tab (Phase 1 basic)
+Smart Link
+
+For each business:
+	â€¢	Auto create a simple link page at a short URL:
+	â€¢	Example: madeeasy.link/{slug}
+	â€¢	Page shows:
+	â€¢	Business name and short description
+	â€¢	Up to N buttons (configurable):
+	â€¢	Call now
+	â€¢	Directions
+	â€¢	Website
+	â€¢	Booking link
+	â€¢	Main offer
+	â€¢	Tracking:
+	â€¢	Page visits
+	â€¢	Clicks per button type
+	â€¢	Store metrics by date
+
+Outcomes Tab
+
+Single page inside the app with:
+	â€¢	Date range selector
+	â€¢	KPI cards for:
+	â€¢	Google Business Profile:
+	â€¢	Calls
+	â€¢	Directions
+	â€¢	Website taps
+	â€¢	Smart Link:
+	â€¢	Visits
+	â€¢	Button taps
+	â€¢	A simple sentence summary at the top
+
+Example:
+
+â€œIn the last 30 days your posts and profile generated 42 calls, 18 directions and 63 visits to your Smart Link.â€
+
+We do not need complex charts yet, just basic numbers and a simple view.
+
+â¸»
+
+5.10 Admin panel (Phase 1 essentials)
+Internal admin must support:
+	â€¢	List of accounts:
+	â€¢	Plan, trial status, created date, last active date
+	â€¢	Filters for:
+	â€¢	Trials ending soon
+	â€¢	Inactive accounts
+	â€¢	Accounts with posting errors
+
+For each account:
+	â€¢	View profile data
+	â€¢	View billing info (from Stripe)
+	â€¢	Force plan change, trial extension, cancellation
+	â€¢	See list of posts and errors
+	â€¢	Internal link to content ops view for that account
+
+â¸»
+
+Phase 2 â€“ Quality and Depth
+
+Phase 2 focuses on polish, internal tools and deeper reporting.
+
+â¸»
+
+6.1 Onboarding and UX upgrades
+	â€¢	Better inline guidance and tooltips
+	â€¢	More structured questions for content (services, offers, local angle)
+	â€¢	Onboarding completion progress shown until done
+	â€¢	Email and in app nudges to:
+	â€¢	Approve drafts
+	â€¢	Connect missing platforms
+	â€¢	Set Smart Link buttons
+
+â¸»
+
+6.2 Human ops tools
+Internal dashboards:
+	â€¢	Queue of â€œaccounts needing attentionâ€, for example:
+	â€¢	No posts scheduled this week
+	â€¢	New trial with checklist complete
+	â€¢	Long time since last asset upload
+
+Features:
+	â€¢	Assign accounts to specific content ops users
+	â€¢	Quick notes and tags per account
+	â€¢	Simple â€œnext actionâ€ tracker
+
+â¸»
+
+6.3 Smart Link and Outcomes upgrades
+Smart Link:
+	â€¢	Simple layout options (1â€“2 themes)
+	â€¢	Drag to reorder buttons
+	â€¢	Optional highlight badge on main offer button
+
+Outcomes:
+	â€¢	Simple charts:
+	â€¢	Calls over time
+	â€¢	Directions over time
+	â€¢	Smart Link visits over time
+	â€¢	Filters by source (GBP vs Smart Link)
+	â€¢	Clearer copy around what each metric means
+
+â¸»
+
+6.4 Roles and permissions
+Introduce â€œStaff / workerâ€ role per business:
+	â€¢	Owner can invite a staff user by email
+	â€¢	Staff can:
+	â€¢	Reply in Inbox
+	â€¢	Approve posts
+	â€¢	View Outcomes
+
+Staff should not be able to:
+	â€¢	Change billing
+	â€¢	Buy Reach Packs
+	â€¢	Change plan
+
+Implement role based access control across all routes and components.
+
+â¸»
+
+Phase 3 â€“ Local Boost Ads Layer (Reach Packs)
+
+This is the ad system built on top of existing posts.
+
+â¸»
+
+7.1 Concept
+Local Boost lets owners:
+	â€¢	Tap a rocket icon on any approved or published post in the Calendar
+	â€¢	Choose a fixed price Reach Pack (Weekend, Weekly, Monthly)
+	â€¢	Confirm a simple radius (5 km or 10 km)
+	â€¢	Charge their card on file
+	â€¢	Have MadeEasy run a local ad on Meta (and later Google) using that post
+
+We use our managed ad accounts. User sees results in the Outcomes tab as â€œBoost Impactâ€.
+
+â¸»
+
+7.2 UI details
+In the Calendar:
+	â€¢	Each eligible post shows a small rocket icon:
+	â€¢	Grey: Boost available
+	â€¢	Green: Boost running
+	â€¢	Yellow: Boost completed
+
+When user clicks the rocket:
+	1.	Show a modal with:
+	â€¢	Post preview
+	â€¢	Short explanatory text:
+	â€¢	â€œTurn this post into a local adâ€
+	â€¢	Three pack options (copy can be configurable), for example:
+	â€¢	Weekend Boost â€“ Â£15 â€“ 3 days â€“ Estimated reach range
+	â€¢	Weekly Spotlight â€“ Â£35 â€“ 7 days â€“ Estimated reach range
+	â€¢	Monthly Presence â€“ Â£100 â€“ 30 days â€“ Estimated reach range
+	â€¢	Default pack selected (Weekly Spotlight)
+	2.	Second step in same modal:
+	â€¢	Simple map image centred on their address with radius overlay
+	â€¢	Toggle inputs:
+	â€¢	Standard radius (for example 5 km)
+	â€¢	Extended radius (for example 10 km)
+	3.	Confirmation:
+	â€¢	Text: â€œCharge card ending in 8842â€
+	â€¢	Single large button: â€œLaunch Boostâ€
+
+After confirm:
+	â€¢	Disable further edits on that Boost
+	â€¢	Show status in Calendar and Outcomes
+
+We do not want any daily budget sliders, advanced options or complicated controls.
+
+â¸»
+
+7.3 Backend and Meta integration
+You should:
+	â€¢	Integrate with Meta Marketing API
+	â€¢	Use an opinionated structure:
+	â€¢	One or two container campaigns per account:
+	â€¢	Traffic and/or Reach
+	â€¢	Each Boost becomes an ad set with:
+	â€¢	Lifetime budget set to pack budget (net of fees and platform margin)
+	â€¢	Geo radius targeting around business location
+	â€¢	Auto placements (Advantage+)
+	â€¢	Create an ad from the existing post:
+	â€¢	Use the creative from the original post where possible
+	â€¢	Or replicate it as a dark post if required by Meta
+
+Caption logic:
+	â€¢	Strip hashtags for the ad version
+	â€¢	Use the same main text otherwise
+
+Destination:
+	â€¢	All Traffic Boosts should go to the business Smart Link URL
+
+Budget handling:
+	â€¢	Store pack price, VAT portion, estimated net media spend and platform margin for each Boost
+	â€¢	Use lifetime budgets so no Boost can overspend due to bugs
+	â€¢	Enforce per account weekly and monthly caps (for example Â£100 per week for new accounts in first 90 days, configurable in admin)
+
+â¸»
+
+7.4 Google local ads integration (later in Phase 3)
+Once Meta is stable, add a simple Google option:
+	â€¢	Use Google Local Services Ads or Smart Campaigns endpoints where possible
+	â€¢	Derive all targeting from:
+	â€¢	GBP category
+	â€¢	Business address
+
+No keyword input from the user.
+
+Same principle:
+	â€¢	Use highest quality weekly image as ad creative
+	â€¢	Set budget to match Reach Pack
+	â€¢	Maximize clicks or local actions strategies
+	â€¢	Feed performance back into Outcomes tab
+
+This can be a second sub phase inside Phase 3 if needed.
+
+â¸»
+
+7.5 Boost Impact reporting
+Outcomes tab should get a new â€œBoost Impactâ€ card:
+	â€¢	Visual:
+	â€¢	Simple stacked bar or side by side bars:
+	â€¢	Organic reach
+	â€¢	Paid reach
+	â€¢	Metrics per Boost:
+	â€¢	Extra views / impressions
+	â€¢	Visits to Smart Link that were paid
+	â€¢	Paid button taps (call, directions, website)
+
+Include a short text summary per Boost:
+
+â€œYour Â£35 Boost added 3,420 views to this post and sent 42 extra visitors to your Smart Link. 8 of them tapped Call.â€
+
+Data needed:
+	â€¢	From Meta / Google:
+	â€¢	Impressions, clicks
+	â€¢	From Smart Link:
+	â€¢	Visits tagged as paid from that campaign
+	â€¢	Button taps
+
+â¸»
+
+7.6 Fraud and safety
+We need basic protection:
+	â€¢	Only accounts that:
+	â€¢	Completed onboarding
+	â€¢	Have a valid card
+	â€¢	Are not flagged for risk
+
+can use Boost.
+
+Controls:
+	â€¢	Per account spend caps:
+	â€¢	Configurable in admin (for example Â£100 per week in first 90 days)
+	â€¢	Use lifetime budgets on all ad sets
+	â€¢	Summaries in admin panel showing:
+	â€¢	Packs bought
+	â€¢	Media spend owed to Meta/Google
+	â€¢	Exceptions and ad rejections
+
+If ad is rejected:
+	â€¢	Stop further spend
+	â€¢	Mark Boost as rejected
+	â€¢	Credit unused portion of pack back as internal Boost credit (not cash)
+	â€¢	Flag reason in internal log and show simple message to user
+
+â¸»
+
+8. Admin, security and logging
+
+Admin panel should include:
+	â€¢	User and account management (plans, status, last login, last posting date)
+	â€¢	Billing overview and link to Stripe dashboard
+	â€¢	Flags:
+	â€¢	Ad risk level per account (low / high)
+	â€¢	Boost history and spend
+	â€¢	API error counts per integration
+
+Logging:
+	â€¢	Centralised error logging (for example Sentry)
+	â€¢	API call logs for:
+	â€¢	Meta marketing endpoints
+	â€¢	Google APIs
+	â€¢	Stripe events
+
+Basic audit trails:
+	â€¢	Who changed what in:
+	â€¢	Plans and discounts
+	â€¢	Boost caps
+	â€¢	Role assignments
+
+â¸»
+
+9. What to include in your quote
+
+When you quote, please include:
+	1.	High level architecture overview
+	â€¢	Tech stack and main components
+	2.	Phase breakdown
+	â€¢	Estimated hours or fixed fee per phase
+	â€¢	What is included in each phase
+	â€¢	Any recommended sub phases
+	3.	Assumptions
+	â€¢	What you expect us to provide (design, copy, AI model access, keys)
+	â€¢	Any third party costs you expect (for example, specific services beyond AWS, Stripe, Meta, Google)
+	4.	Timelines
+	â€¢	Rough delivery time per phase
+	â€¢	Earliest realistic start date
+	5.	Change handling
+	â€¢	How you handle scope change
+	â€¢	How you handle bug fixes and warranty after go live
+	6.	Support and handover
+	â€¢	How you document the system
+	â€¢	Handover plan for our internal team
+	â€¢	Ongoing maintenance options and rates
